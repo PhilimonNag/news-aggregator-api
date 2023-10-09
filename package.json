@@ -1,0 +1,34 @@
+{
+  "name": "news-aggregator-api",
+  "version": "1.0.0",
+  "description": "Authentication And Authorization",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "node --test",
+    "start": "node src/app.js",
+    "dev":"nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilimonNag/news-aggregator-api.git"
+  },
+  "keywords": [
+    "Authentication",
+    "Authorization",
+    "node.js",
+    "JWT"
+  ],
+  "author": "Philimon Nag",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhilimonNag/news-aggregator-api/issues"
+  },
+  "homepage": "https://github.com/PhilimonNag/news-aggregator-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.6.0"
+  }
+}
