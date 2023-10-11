@@ -1,24 +1,39 @@
+const jwt= require('jsonwebtoken');
 const mongoose=require('mongoose');
 const userSchema=new mongoose.Schema({
     fullName:{type:String,
-    require:[true,'fullName is required']},
+    required:[true,'fullName is required']},
     email:{
         type:String,
-        require:[true,'Email is required'],
+        required:[true,'Email is required'],
         unique:[true,'User already Exist with same Email'],
-        validator:()=>{
-
-        }
+        validate: {
+            validator: function(v) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+            },
+            message: "Please enter a valid email"
+        },
     },
     password:{
         type:String,
-        require:[true,'Password is required']
+        required:[true,'Password is required']
     },
     role:{
         type:String,
         enum:['normal','admin'],
-        require:[true,'User role is required']
+        required:[true,'User role is required']
     }
 },{
     timestamps:true
 })
+userSchema.pre('save',function(){
+
+});
+// userSchema.methods.verifyToken=function(token){
+//  const verifiedtoken=jwt.verify(token,process.env.JWT_SECRET)
+//  if(verifiedtoken){
+//     return user._id
+//  }
+// }
+const user=mongoose.model('users',userSchema);
+module.exports=user

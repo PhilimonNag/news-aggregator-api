@@ -3,7 +3,7 @@ const express=require('express');
 const app=express()
 const PORT=process.env.PORT||8001;
 const router=require('./routes/router')
-
+require('./config/config')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
