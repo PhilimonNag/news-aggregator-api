@@ -113,11 +113,11 @@ Authorization: yourToken
 ## Configuration
 The API can be configured in .env file
 ```
-JWT_SECRET=
-PORT=
-DB_URL=
+JWT_SECRET=yoursecrettoken
+PORT=8002
+DB_URL=yourmongodburl
 NEWS_URL='https://newsapi.org/v2/top-headlines/sources?'
-API_KEY=
+API_KEY=yournewsapikey
 ```
 
 ## Project structure
