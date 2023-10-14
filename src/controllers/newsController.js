@@ -1,14 +1,14 @@
 const Preference = require("../helpers/preferenceValidator");
-const querystring = require("querystring");
+const data = require("../localdatasource/data.json");
 const axios = require("axios");
 let myPreference = {};
 const fetchMyPreference = (req, res) => {
   const userId = req.user_id;
   if (myPreference.hasOwnProperty(userId)) {
     let data = myPreference[userId];
-    res.status(200).send({ data: data });
+    res.status(200).send({ success: false, result: data });
   } else {
-    res.status(404).send({ message: "Preference Not found" });
+    res.status(404).send({ success: false, message: "Preference Not found" });
   }
 };
 const updateMyPreference = (req, res) => {
@@ -23,12 +23,13 @@ const updateMyPreference = (req, res) => {
       if (language) preferences["language"] = language;
       if (country) preferences["country"] = country;
       myPreference[userId] = preferences;
-      res.status(200).send({ message: "Preference modified" });
+      res.status(200).send({ success: true, message: "Preference modified" });
     } else {
-      res.status(400).send({ message });
+      res.status(400).send({ success: false, message });
     }
   } else {
     res.status(400).send({
+      success: false,
       message: "Please provide atleast category or language or country",
     });
   }
@@ -47,7 +48,6 @@ const fetchNews = async (req, res) => {
         // console.log(data);
         res.status(200).send({
           success: true,
-
           message: `${data.data.totalResults} News Found`,
           result: data.data.articles,
         });
@@ -65,8 +65,16 @@ const fetchNews = async (req, res) => {
     });
   }
 };
+const fetchAvailablePreference = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Available Preference Founds",
+    result: data,
+  });
+};
 module.exports = {
   fetchMyPreference,
   updateMyPreference,
   fetchNews,
+  fetchAvailablePreference,
 };

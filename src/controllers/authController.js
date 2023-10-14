@@ -12,17 +12,44 @@ const signUp = async (req, res) => {
       role,
     });
     await newUser.save();
-    res.status(200).send({ message: "User Created", newUser });
+    const token = jwt.sign({ payload: newUser.id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+    res.status(200).send({
+      success: true,
+      message: "Sign Up succesfull",
+      accessToken: token,
+    });
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    if (error.name === "ValidationError")
+      res.status(400).send({
+        success: false,
+        message: error.message,
+      });
+    else if (error.code == 11000)
+      res.status(400).send({
+        success: false,
+        message: "Email Already Exist",
+      });
+    else
+      res.status(500).send({
+        success: false,
+        message: error.message,
+      });
   }
 };
 const signIn = async (req, res) => {
   try {
     if (!req.body.hasOwnProperty("email")) {
-      res.status(400).send({ message: "Email is required" });
+      res.status(400).send({
+        success: false,
+        message: "Email is required",
+      });
     } else if (!req.body.hasOwnProperty("password")) {
-      res.status(400).send({ message: "Password is required" });
+      res.status(400).send({
+        success: false,
+        message: "Password is required",
+      });
     } else {
       const { email, password } = req.body;
       const user = await userModel.findOne({ email });
@@ -34,20 +61,24 @@ const signIn = async (req, res) => {
           });
           user.password = undefined;
           res.status(200).send({
+            success: true,
             message: "Loging Successfully",
             accessToken: token,
-            data: user,
           });
         } else {
-          res.status(401).send({ message: "Email and Password not matched" });
+          res.status(401).send({
+            success: false,
+            message: "Invalid Email and Password",
+          });
         }
       } else {
-        res.status(400).send({ message: "Email and Password not matched" });
+        res
+          .status(400)
+          .send({ success: false, message: "Invalid Email and Password" });
       }
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: error });
+    res.status(500).send({ success: false, message: error });
   }
 };
 
